@@ -11,6 +11,8 @@ exports = module.exports = function(req, res) {
 	
 	view.query('organisations', Organisation.model.find().sort('name'), 'members');
 	
+	console.log("members", locals.organisations);
+
 	view.render('site/organisations');
 	
 }

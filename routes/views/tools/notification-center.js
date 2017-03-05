@@ -72,7 +72,7 @@ exports = module.exports = function(req, res) {
 	});
 
 	
-	// Notify all SydJS subscribers
+	// Notify all Ceptr subscribers
 
 	view.on('post', { action: 'notify.subscriber' }, function(next) {
 		if (!locals.subscribers) {
@@ -82,13 +82,13 @@ exports = module.exports = function(req, res) {
 			async.each(locals.subscribers, function(subscriber, doneSubscriber) {
 				new keystone.Email('member-notification').send({
 					subscriber: subscriber,
-					subject: req.body.subscriber_email_subject || 'Notification from SydJS',
+					subject: req.body.subscriber_email_subject || 'Notification from Ceptr',
 					content: req.body.subscriber_email_content,
 					link_label: req.body.subscriber_email_link_label,
 					link_url: req.body.subscriber_email_link_url,
 					to: subscriber.email,
 					from: {
-						name: 'SydJS',
+						name: 'Ceptr',
 						email: 'hello@sydjs.com'
 					}
 				}, doneSubscriber);

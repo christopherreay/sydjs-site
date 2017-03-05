@@ -22,10 +22,11 @@ mixin organisation(org)
 				!= org.description.html
 			if org.website
 				h5: a(href=org.website, target='_blank')= org.website.replace('http://', '')
+			div.btn SORT IT OUT
 		if org.members && org.members.length
 			.col-sm-9.col-sm-offset-3.col-md-2.col-md-offset-0
 				hr.line-dashed.visible-xs.visible-sm
 				h6.text-muted.mt-0 Members in #{org.name}
 				ul.list-unstyled
 					each member in org.members
-						li=member.name.full
+							li=member.name.full

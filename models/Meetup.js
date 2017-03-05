@@ -119,7 +119,7 @@ Meetup.schema.methods.notifyAttendees = function(req, res, next) {
 					subject: 'New meetup: ' + meetup.name,
 					to: attendee.email,
 					from: {
-						name: 'SydJS',
+						name: 'Ceptr',
 						email: 'hello@sydjs.com'
 					}
 				}, next);
