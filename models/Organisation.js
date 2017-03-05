@@ -23,6 +23,8 @@ Organisation.add
 	},
 	"Description",
 	{ description: { type: Types.Markdown },
+    location: Types.Location
+
 	}
 );
 

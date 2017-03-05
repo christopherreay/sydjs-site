@@ -9,11 +9,12 @@ mixin organisation(org)
 					span.org__logo
 						img(src=org._.logo.limit(120,120), alt=org.name)
 		.col-sm-9.col-md-8
+			a(href="/organisation?id="+org._id)
+				h2.org__heading
+					=org.name
 			h2.org__heading
 				if org.website
 					a(href=org.website, target='_blank')= org.name
-				else
-					= org.name
 			if org.location.serialised
 				h4.org__location
 					span.org__location-icon.entypo.entypo-location
@@ -22,7 +23,7 @@ mixin organisation(org)
 				!= org.description.html
 			if org.website
 				h5: a(href=org.website, target='_blank')= org.website.replace('http://', '')
-			div.btn SORT IT OUT
+			button SORT IT OUT
 		if org.members && org.members.length
 			.col-sm-9.col-sm-offset-3.col-md-2.col-md-offset-0
 				hr.line-dashed.visible-xs.visible-sm
@@ -30,3 +31,4 @@ mixin organisation(org)
 				ul.list-unstyled
 					each member in org.members
 							li=member.name.full
+
