@@ -82,12 +82,12 @@ Organisation.schema.post('save', function(ThisDoc) {
     }
     else
     { debugger;
-      var chainName = listOfChains[i];
+      var chainName = listOfChains[currentIndex];
 
       var bsPort          = parseInt(ThisDoc.bootstrapPort);
       var publicPortCount = parseInt(ThisDoc.publicPortCount);
 
-      bsPort              = bsPort + (publicPortCount * 2 * i) + i;
+      bsPort              = bsPort + (publicPortCount * 2 * currentIndex) + currentIndex;
       var publicPortStart = bsPort+1;
       var publicPortEnd   = publicPortStart + ( publicPortCount * 2 ) -1;
     
@@ -99,7 +99,7 @@ Organisation.schema.post('save', function(ThisDoc) {
       child_process.exec
       ( execString2,
         function()
-        { recursiveCallbackChains(currentIndex +1)
+        { setImmediate(function(){recursiveCallbackChains(currentIndex +1)});
         }
       );
     }
