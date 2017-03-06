@@ -1,1 +1,6 @@
 extends ../../layouts/visualPress
+
+block js
+  each org, i in organisations
+    script.
+      visualPress.organisation = #{org}
