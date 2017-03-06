@@ -92,7 +92,7 @@ Organisation.schema.post('save', function(ThisDoc) {
     var publicPortEnd   = publicPortStart + ( publicPortCount * 2 ) -1;
   
 
-    commandLineArgs2   = [groupName, chainName, bsPort, publicPortStart, publicPortEnd, "2>&1 | tee -a "+groupLog+"/"+chainName+".log >> "+groupLog+"/allServers.log" ].join(" ");
+    commandLineArgs2   = [groupName, chainName, bsPort, publicPortStart, publicPortEnd ].join(" ");
     var execString2        = "/home/holochain/Scripts/hc.initialiseChain "+commandLineArgs2;
     console.log(execString2);
 

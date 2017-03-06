@@ -44,7 +44,7 @@ exports = module.exports = function(req, res) {
 
           console.log(groupName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) );
 
-          var commandLineArgs   = [groupName, chainName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) - 1, "2>&1 | tee -a "+groupLog*"/"*chainName+".log >> "+groupDir+"/allServers.log"].join(" ");
+          var commandLineArgs   = [groupName, chainName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) - 1].join(" ");
           var execString        = "/home/holochain/Scripts/hc.blowAwayAndPullAndRestart "+commandLineArgs;
 
           sysExec
@@ -80,7 +80,7 @@ exports = module.exports = function(req, res) {
 
             console.log(groupName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) );
 
-            var commandLineArgs   = [groupName, chainName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) - 1, "2>&1 | tee -a "+groupDir*"/"*chainName+".log >> "+groupDir+"/allServers.log"].join(" ");
+            var commandLineArgs   = [groupName, chainName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) - 1].join(" ");
             var execString        = "/home/holochain/Scripts/hc.blowAwayAndPullAndRestart "+commandLineArgs;
 
             sysExec
