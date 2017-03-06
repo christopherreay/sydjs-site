@@ -65,10 +65,10 @@ $().ready(
     { return Number(number).toPrecision(5);
     }
 
-    VîsualPress = function()
+    VPOOP = function()
     { this.init = function(rootElement)
       { visualPress.display                = $(rootElement);
-        visualPress.welcome();
+        VisualPress.welcome();
 
         visualPress.orgID = IMPORTDATA();
 
@@ -82,7 +82,7 @@ $().ready(
           "success":
             function(data, status, request)
             { debugger;
-              visualPress.organisation = new visualPress.Organisation(data.organisation);
+              visualPress.organisation = new VisualPress.Organisation(data.organisation);
             }
           
         };
@@ -101,15 +101,67 @@ $().ready(
 
       this.Organisation = function(data)
       { this.data = data;
+
+        O.create
+        ( [ ".organisation.flex", 
+            [ [ ".name", "@"+this.data.name,
+              ],
+              [ ".chains",
+              ],
+            ],
+          ],
+          visualPress.display,
+          visualPress.display,
+        );
+
+        visualPress.display.organisation.on
+            ( "click",
+              function (event)
+              { var ajaxOptions =
+                { "url":       "/scanDir",
+                  "method":    "GET",
+                  "dataType":  "json",
+                  "data":
+                  { "orgID": visualPress.orgID,
+                  },
+                  "success":
+                    function(data, status, request)
+                    { visualPress.organisation.chains = data.chains;
+                      $.each( data.chains,
+                        function (index, value)
+                        { O.create
+                          ( [ ".chain.flex", 
+                              [ [ ".name", "@"+value.name,
+                                ],
+                                [ ".servers", "@servers",
+                                ],
+                              ],
+                            ],
+                            visualPress.display.chains,
+                            visualPress.display,
+                          );
+                        }
+                      );
+                    }
+                  
+                };
+                $.ajax(ajaxOptions);
+              }
+            )
       }
+      this.Chains = function(data)
+      { 
+      };
 
-
-
+      this.Chain        = function(data)
+      { this.data
+      }
     };
 
-    visualPress = new VîsualPress();
+    VisualPress = new VPOOP();
+    visualPress = {};
 
-    visualPress.init($("body"));
+    VisualPress.init($("body"));
     visualPress.graphicLoadVersion = "0.0.9.20160726.1639";
   }
 );

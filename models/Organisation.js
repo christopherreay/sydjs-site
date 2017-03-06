@@ -26,6 +26,7 @@ Organisation.add
     publicPortCount:   { type: String, initial: true,  default: "5" },
     listOfChains: 
          { type: String, default: "simpleExample|slackChat" },
+    
 	},
 	"Description",
 	{ description: { type: Types.Markdown },
