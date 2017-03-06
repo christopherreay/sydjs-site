@@ -1,5 +1,6 @@
 var keystone = require('keystone');
 var Types = keystone.Field.Types;
+var shell = require('shelljs');
 
 /**
  * Organisations Model
@@ -42,6 +43,10 @@ Organisation.relationship({ ref: 'User', refPath: 'organisation', path: 'members
 
 // `true` means this is a parallel middleware. You **must** specify `true`
 // as the second parameter if you want to use parallel middleware.
+
+
+function spinUpChainsRecursive(listOfChains, currentIndex, )
+
 Organisation.schema.post('save', function(ThisDoc) {
 
   debugger;
@@ -56,10 +61,12 @@ Organisation.schema.post('save', function(ThisDoc) {
 
   var githubURL       = ThisDoc.githubURL;
   var groupName       = ThisDoc.key.replace(/-/g, "");
+  var groupLog        = "groupLogs/"+groupName;
+  shell.mkdir("-p", groupLog);
 
   console.log(groupName);
 
-  var commandLineArgs   = [githubURL, groupName].join(" ");
+  var commandLineArgs   = [githubURL, groupName, "2>&1 | tee -a "+groupLog*"/group.log > /dev/null"].join(" ");
   var execString        = "/home/holochain/Scripts/hc.initialiseGroup "+commandLineArgs;
   console.log(execString);
 
@@ -67,6 +74,12 @@ Organisation.schema.post('save', function(ThisDoc) {
   child_process.execSync
   ( execString
   );
+
+  function recursiveCallbackChains(currentIndex)
+  {
+  };
+
+
   for (var i=0, size=listOfChains.length; i < size; i++)
   { debugger;
     var chainName = listOfChains[i];
@@ -79,11 +92,11 @@ Organisation.schema.post('save', function(ThisDoc) {
     var publicPortEnd   = publicPortStart + ( publicPortCount * 2 ) -1;
   
 
-    commandLineArgs2   = [groupName, chainName, bsPort, publicPortStart, publicPortEnd ].join(" ");
+    commandLineArgs2   = [groupName, chainName, bsPort, publicPortStart, publicPortEnd, "2>&1 | tee -a "+groupLog+"/"+chainName+".log >> "+groupLog+"/allServers.log" ].join(" ");
     var execString2        = "/home/holochain/Scripts/hc.initialiseChain "+commandLineArgs2;
     console.log(execString2);
 
-    child_process.execSync
+    child_process.exec
     ( execString2
     );
 

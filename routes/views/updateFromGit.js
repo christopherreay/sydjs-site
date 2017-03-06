@@ -13,15 +13,6 @@ exports = module.exports = function(req, res) {
   
   debugger;
 
-  var callbacks = view.query
-  ( 'organisations', 
-    Organisation.model.find({"_id": req.query.orgID}).sort('name'), 
-    function()
-    { console.log("SOME OPAQUE SHIT");
-      members();
-    }
-  );
-
   var organisationID =  req.query.orgID;
   var chainName      =  req.query.chainName;
 
@@ -35,6 +26,8 @@ exports = module.exports = function(req, res) {
         var fs        = require('fs');
 
         var groupName         = organisation.key.replace(/-/g, "");
+        var groupLog          = "groupLogs/"+groupName;
+        shell.mkdir("-p", groupLog);
         var listOfChains = organisation.listOfChains.split("|");
 
         
@@ -51,7 +44,7 @@ exports = module.exports = function(req, res) {
 
           console.log(groupName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) );
 
-          var commandLineArgs   = [groupName, chainName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) - 1].join(" ");
+          var commandLineArgs   = [groupName, chainName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) - 1, "2>&1 | tee -a "+groupLog*"/"*chainName+".log >> "+groupDir+"/allServers.log"].join(" ");
           var execString        = "/home/holochain/Scripts/hc.blowAwayAndPullAndRestart "+commandLineArgs;
 
           sysExec
@@ -87,7 +80,7 @@ exports = module.exports = function(req, res) {
 
             console.log(groupName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) );
 
-            var commandLineArgs   = [groupName, chainName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) - 1].join(" ");
+            var commandLineArgs   = [groupName, chainName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) - 1, "2>&1 | tee -a "+groupDir*"/"*chainName+".log >> "+groupDir+"/allServers.log"].join(" ");
             var execString        = "/home/holochain/Scripts/hc.blowAwayAndPullAndRestart "+commandLineArgs;
 
             sysExec

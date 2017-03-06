@@ -37,6 +37,7 @@
     "react": "0.14.8",
     "react-dom": "0.14.8",
     "request": "2.69.0",
+    "shelljs": "^0.7.6",
     "store-prototype": "1.1.1",
     "superagent": "1.8.5",
     "uuid": "^3.0.1"
