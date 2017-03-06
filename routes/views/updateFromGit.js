@@ -48,7 +48,7 @@ exports = module.exports = function(req, res) {
 
           console.log(groupName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) );
 
-          var commandLineArgs   = [groupName, chainName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) - 1].join(" ");
+          var commandLineArgs   = [groupName, chainName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) - 1, "2>&1 | tee -a "+groupLog+"/"+chainName+".log >> "+groupLog+"/allServers.log"].join(" ");
           var execString        = absoluteAddress+"/Scripts/hc.blowAwayAndPullAndRestart "+commandLineArgs;
 
           sysExec
@@ -84,7 +84,7 @@ exports = module.exports = function(req, res) {
 
             console.log(groupName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) );
 
-            var commandLineArgs   = [groupName, chainName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) - 1].join(" ");
+            var commandLineArgs   = [groupName, chainName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) - 1, "2>&1 | tee -a "+groupLog+"/"+chainName+".log >> "+groupLog+"/allServers.log"].join(" ");
             var execString        = absoluteAddress+"/Scripts/hc.blowAwayAndPullAndRestart "+commandLineArgs;
 
             sysExec

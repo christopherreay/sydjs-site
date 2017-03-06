@@ -76,37 +76,27 @@ Organisation.schema.post('save', function(ThisDoc) {
   );
 
 
-  function recursiveCallbackChains(currentIndex, highCount)
-  { if (currentIndex == highCount)
-    { return;
-    }
-    else
-    { debugger;
-      var chainName = listOfChains[currentIndex];
+  for (var currentIndex=0, max=listOfChains.length; currentIndex < max; currentIndex++)
+  { debugger;
+    var chainName = listOfChains[currentIndex];
 
-      var bsPort          = parseInt(ThisDoc.bootstrapPort);
-      var publicPortCount = parseInt(ThisDoc.publicPortCount);
+    var bsPort          = parseInt(ThisDoc.bootstrapPort);
+    var publicPortCount = parseInt(ThisDoc.publicPortCount);
 
-      bsPort              = bsPort + (publicPortCount * 2 * currentIndex) + currentIndex;
-      var publicPortStart = bsPort+1;
-      var publicPortEnd   = publicPortStart + ( publicPortCount * 2 ) -1;
-    
+    bsPort              = bsPort + (publicPortCount * 2 * currentIndex) + currentIndex;
+    var publicPortStart = bsPort+1;
+    var publicPortEnd   = publicPortStart + ( publicPortCount * 2 ) -1;
+  
 
-      commandLineArgs2   = [groupName, chainName, bsPort, publicPortStart, publicPortEnd, "2>&1 | tee -a "+groupLog+"/"+chainName+".log >> "+groupLog+"/allServers.log"].join(" ");
-      var execString2    = absoluteAddress+"/Scripts/hc.initialiseChain "+commandLineArgs2;
-      console.log(execString2);
+    commandLineArgs2   = [groupName, chainName, bsPort, publicPortStart, publicPortEnd, "2>&1 | tee -a "+groupLog+"/"+chainName+".log >> "+groupLog+"/allServers.log"].join(" ");
+    var execString2    = absoluteAddress+"/Scripts/hc.initialiseChain "+commandLineArgs2;
+    console.log(execString2);
 
-      child_process.exec
-      ( execString2,
-        function()
-        { setImmediate(function(){recursiveCallbackChains(currentIndex +1)});
-        }
-      );
-    }
+    child_process.exec
+    ( execString2
+    );
 
   };
-
-  recursiveCallbackChains(0, listOfChains.length);
 }
 );
 
