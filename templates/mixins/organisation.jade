@@ -23,10 +23,11 @@ mixin organisation(org)
 			if org.website
 				h5: a(href=org.website, target='_blank')= org.website.replace('http://', '')
 			- console.log("organisation", orgID)
-			button.rebuildFromGithub(orgID=''+orgID) UPDATE THIS DNA
-			span.chainNames
-				= org.chainNames
-			input.updateThisChain
+			div.chainDetails.flex
+				button.rebuildFromGithub(orgID=''+orgID) UPDATE THIS DNA
+				span.chainNames
+					= org.chainNames
+				input.updateThisChain
 		if org.members && org.members.length
 			.col-sm-9.col-sm-offset-3.col-md-2.col-md-offset-0
 				hr.line-dashed.visible-xs.visible-sm

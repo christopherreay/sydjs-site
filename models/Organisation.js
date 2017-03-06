@@ -83,7 +83,7 @@ Organisation.schema.post('save', function(ThisDoc) {
     var execString2        = "/home/holochain/Scripts/hc.initialiseChain "+commandLineArgs2;
     console.log(execString2);
 
-    child_process.execSync
+    child_process.exec
     ( execString2
     );
 

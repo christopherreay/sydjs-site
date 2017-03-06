@@ -31,13 +31,21 @@ exports = module.exports = function(req, res) {
       { debugger;
         console.log("organisation", organisation);
 
-        var sysExec   = require('child_process').exec;
+        var child_process   = require('child_process');
         var fs        = require('fs');
 
         var groupName         = organisation.key.replace(/-/g, "");
-        var listOfChains = organisation.listOfChains.split("|");
-
         
+        var commandLineArgs   = [groupName].join(" ");
+        var execString        = "/home/holochain/Scripts/hc.updateGitRepo "+commandLineArgs;
+        console.log(execString);
+
+        var fileContentsList = [execString];
+        child_process.execSync
+        ( execString
+        );
+
+        var listOfChains = organisation.listOfChains.split("|");
         var i                 = listOfChains.indexOf(chainName);
 
         if (i != -1)

@@ -1,3 +1,7 @@
+.flex
+{ display: flex;  
+}
+
 .navbar
 {     background-image: url(/images/graphics/ceptr.logo.wide.png);
     background-size: contain;
@@ -6,3 +10,4 @@
     height: 100%;
 }
 }
+
