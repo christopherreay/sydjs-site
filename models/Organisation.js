@@ -65,7 +65,8 @@ Organisation.schema.post('save', function(ThisDoc) {
   
   console.log(groupName);
 
-  var commandLineArgs   = [githubURL, groupName].join(" ");
+  shell.mkdir("-p", groupLog);
+  var commandLineArgs   = [githubURL, groupName, "2>&1 | tee -a "+groupLog+"/allServers.log > /dev/null"].join(" ");
   var execString        = absoluteAddress+"/Scripts/hc.initialiseGroup "+commandLineArgs;
   console.log(execString);
 
@@ -74,35 +75,38 @@ Organisation.schema.post('save', function(ThisDoc) {
   ( execString
   );
 
-  function recursiveCallbackChains(currentIndex)
-  {
+
+  function recursiveCallbackChains(currentIndex, highCount)
+  { if (currentIndex == highCount)
+    { return;
+    }
+    else
+    { debugger;
+      var chainName = listOfChains[i];
+
+      var bsPort          = parseInt(ThisDoc.bootstrapPort);
+      var publicPortCount = parseInt(ThisDoc.publicPortCount);
+
+      bsPort              = bsPort + (publicPortCount * 2 * i) + i;
+      var publicPortStart = bsPort+1;
+      var publicPortEnd   = publicPortStart + ( publicPortCount * 2 ) -1;
+    
+
+      commandLineArgs2   = [groupName, chainName, bsPort, publicPortStart, publicPortEnd ].join(" ");
+      var execString2    = absoluteAddress+"/Scripts/hc.initialiseChain "+commandLineArgs2;
+      console.log(execString2);
+
+      child_process.exec
+      ( execString2,
+        function()
+        { recursiveCallbackChains(currentIndex +1)
+        }
+      );
+    }
+
   };
 
-
-  for (var i=0, size=listOfChains.length; i < size; i++)
-  { debugger;
-    var chainName = listOfChains[i];
-
-    var bsPort          = parseInt(ThisDoc.bootstrapPort);
-    var publicPortCount = parseInt(ThisDoc.publicPortCount);
-
-    bsPort              = bsPort + (publicPortCount * 2 * i) + i;
-    var publicPortStart = bsPort+1;
-    var publicPortEnd   = publicPortStart + ( publicPortCount * 2 ) -1;
-  
-
-    commandLineArgs2   = [groupName, chainName, bsPort, publicPortStart, publicPortEnd ].join(" ");
-    var execString2        = absoluteAddress+"/Scripts/hc.initialiseChain "+commandLineArgs2;
-    console.log(execString2);
-
-    child_process.exec
-    ( execString2
-    );
-
-    //fileContentsList.push(execString2);
-
-
-  }
+  recursiveCallbackChains(0, listOfChains.length);
 }
 );
 
