@@ -22,39 +22,86 @@ exports = module.exports = function(req, res) {
     }
   );
 
-  Organisation.model.findOne({"_id": req.query.orgID})
+  var organisationID =  req.query.orgID;
+  var chainName      =  req.query.chainName;
+
+  Organisation.model.findOne({"_id": organisationID})
     .exec
     ( function(err, organisation)
       { debugger;
         console.log("organisation", organisation);
 
-        var uuid      = require('uuid');
         var sysExec   = require('child_process').exec;
         var fs        = require('fs');
 
-        var groupName       = organisation.key.replace(/-/g, "");
-        var bsPort          = parseInt(organisation.bootstrapPort);
-        var publicPortStart = parseInt(organisation.publicPortStart);
-        var publicPortCount = parseInt(organisation.publicPortCount);
+        var groupName         = organisation.key.replace(/-/g, "");
+        var listOfDirectories = organisation.listOfDirectories.split("|");
+
+        
+        var i                 = listOfDirectories.indexOf(chainName);
+
+        if (i != -1)
+        { var bsPort          = parseInt(ThisDoc.bootstrapPort);
+          var publicPortCount = parseInt(ThisDoc.publicPortCount);
+
+          bsPort              = bsPort + (publicPortCount * 2 * i) + i;
+          var publicPortStart = bsPort+1;
+          var publicPortEnd   = publicPortStart + ( publicPortCount * 2 ) -1;
 
 
-        console.log(groupName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) );
+          console.log(groupName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) );
 
-        var commandLineArgs   = [groupName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) - 1].join(" ");
-        var execString        = "/home/holochain/Scripts/hc.blowAwayAndPullAndRestart "+commandLineArgs;
+          var commandLineArgs   = [groupName, chainName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) - 1].join(" ");
+          var execString        = "/home/holochain/Scripts/hc.blowAwayAndPullAndRestart "+commandLineArgs;
 
-        sysExec
-        ( execString, 
-          { /*"env": newEnv,*/
-          },
-          function(error, stdout, stderr)
+          sysExec
+          ( execString, 
+            { /*"env": newEnv,*/
+            },
+            function(error, stdout, stderr)
+            { debugger;
+
+              console.log(stdout);
+              //add this stdout to doc.osUser
+              //ThisDoc.osUser += "<div>"+stdout+"</div>";
+            }
+          ) 
+        }
+        else
+        { if (fs.existsSync("/home/holochain/"+groupName+"/"+chainName)) 
           { debugger;
 
-            console.log(stdout);
-            //add this stdout to doc.osUser
-            //ThisDoc.osUser += "<div>"+stdout+"</div>";
+            listOfDirectories.push(chainName);
+
+            i                 = listOfDirectories.indexOf(chainName);
+
+            var bsPort          = parseInt(ThisDoc.bootstrapPort);
+            var publicPortCount = parseInt(ThisDoc.publicPortCount);
+
+            bsPort              = bsPort + (publicPortCount * 2 * i) + i;
+            var publicPortStart = bsPort+1;
+            var publicPortEnd   = publicPortStart + ( publicPortCount * 2 ) -1;
+
+
+            console.log(groupName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) );
+
+            var commandLineArgs   = [groupName, chainName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) - 1].join(" ");
+            var execString        = "/home/holochain/Scripts/hc.blowAwayAndPullAndRestart "+commandLineArgs;
+
+            sysExec
+            ( execString, 
+              { /*"env": newEnv,*/
+              },
+              function(error, stdout, stderr)
+              { debugger;
+
+                console.log(stdout);
+                //add this stdout to doc.osUser
+                //ThisDoc.osUser += "<div>"+stdout+"</div>";
+              }
+            ) 
           }
-        ) 
+        }
       }
     );
 

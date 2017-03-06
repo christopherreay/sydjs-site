@@ -19,17 +19,17 @@ Organisation.add
 	{
   githubRepo:          Types.Url,
 	},
-  ""
-  {
+  "Server Stuff"
+  { 
     bootstrapPort: 	   { type: String, initial: true   },
   	publicPortStart: 	 { type: String, initial: true   },
     publicPortCount:   { type: String, initial: true,  default: "5" },
+    chainNames:        { type: String, default: "simpleExample|slackChat" },
 	},
 	"Description",
 	{ description: { type: Types.Markdown },
     location: Types.Location
-
-	}
+	},
 );
 
 /**
@@ -52,15 +52,14 @@ env_tet.schema.pre('save', function(next) {
   
   var ThisDoc = this;
 
+  var listOfDirectories = ThisDoc.listOfDirectories.split("|");
+
   var githubURL       = ThisDoc.githubURL;
   var groupName       = ThisDoc.key.replace(/-/g, "");
-  var bsPort          = parseInt(ThisDoc.bootstrapPort);
-  var publicPortStart = parseInt(ThisDoc.publicPortStart);
-  var publicPortCount = parseInt(ThisDoc.publicPortCount);
 
   console.log(githubURL, groupName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) -1 );
 
-  var commandLineArgs   = [githubURL, groupName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) -1 ].join(" ");
+  var commandLineArgs   = [githubURL, groupName].join[" "];
   var execString        = "/home/holochain/Scripts/hc.initialiseGroup "+commandLineArgs;
 
   sysExec
@@ -73,6 +72,34 @@ env_tet.schema.pre('save', function(next) {
       console.log(stdout);
       //add this stdout to doc.osUser
       //ThisDoc.osUser += "<div>"+stdout+"</div>";
+
+      for (var i=0, size=listOfDirectories.length; i < size; i++)
+      { var chainName = listOfDirectories[i];
+
+        var bsPort          = parseInt(ThisDoc.bootstrapPort);
+        var publicPortCount = parseInt(ThisDoc.publicPortCount);
+
+        bsPort              = bsPort + (publicPortCount * 2 * i) + i;
+        var publicPortStart = bsPort+1;
+        var publicPortEnd   = publicPortStart + ( publicPortCount * 2 ) -1;
+      
+
+        var commandLineArgs   = [groupName, chainName, bsPort, publicPortStart, publicPortEnd ].join(" ");
+        var execString        = "/home/holochain/Scripts/hc.initialiseChain "+commandLineArgs;
+
+        sysExec
+        ( execString, 
+          { /*"env": newEnv,*/
+          },
+          function(error, stdout, stderr)
+          { debugger;
+
+            console.log(stdout);
+            //add this stdout to doc.osUser
+            //ThisDoc.osUser += "<div>"+stdout+"</div>";
+          }
+        );
+      }
     }
   ) 
   

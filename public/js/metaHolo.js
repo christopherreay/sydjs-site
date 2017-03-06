@@ -9,6 +9,7 @@ $().ready
 						"dataType":  "json",
 						"data":
             { "orgID": $(event.target).attr("orgID"),
+              "chainName": $(".updateThisChain").val() 
             },
 
 					};
