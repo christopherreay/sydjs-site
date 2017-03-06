@@ -17,19 +17,20 @@ Organisation.add
 	},
 	"Project Repo",
 	{
-  githubRepo:          Types.Url,
+  githubURL:          { type: Types.Url,    initial: true   },
 	},
-  "Server Stuff"
+  "Server Stuff",
   { 
     bootstrapPort: 	   { type: String, initial: true   },
-  	publicPortStart: 	 { type: String, initial: true   },
+  	//publicPortStart: 	 { type: String, initial: true   },
     publicPortCount:   { type: String, initial: true,  default: "5" },
-    chainNames:        { type: String, default: "simpleExample|slackChat" },
+    listOfChains: 
+         { type: String, default: "simpleExample|slackChat" },
 	},
 	"Description",
 	{ description: { type: Types.Markdown },
     location: Types.Location
-	},
+	}
 );
 
 /**
@@ -41,69 +42,57 @@ Organisation.relationship({ ref: 'User', refPath: 'organisation', path: 'members
 
 // `true` means this is a parallel middleware. You **must** specify `true`
 // as the second parameter if you want to use parallel middleware.
-env_tet.schema.pre('save', function(next) {
+Organisation.schema.post('save', function(ThisDoc) {
 
   debugger;
 
-  var uuid            = require('node-uuid');
-  var sysExec         = require('child_process').exec;
+  var child_process   = require('child_process');
   var fs              = require('fs');
 
   
-  var ThisDoc = this;
+  console.log(ThisDoc);
 
-  var listOfDirectories = ThisDoc.listOfDirectories.split("|");
+  var listOfChains    = ThisDoc.listOfChains.split("|");
 
   var githubURL       = ThisDoc.githubURL;
   var groupName       = ThisDoc.key.replace(/-/g, "");
 
-  console.log(githubURL, groupName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) -1 );
+  console.log(groupName);
 
-  var commandLineArgs   = [githubURL, groupName].join[" "];
+  var commandLineArgs   = [githubURL, groupName].join(" ");
   var execString        = "/home/holochain/Scripts/hc.initialiseGroup "+commandLineArgs;
+  console.log(execString);
 
-  sysExec
-  ( execString, 
-    { /*"env": newEnv,*/
-    },
-    function(error, stdout, stderr)
-    { debugger;
+  var fileContentsList = [execString];
+  child_process.execSync
+  ( execString
+  );
+  for (var i=0, size=listOfChains.length; i < size; i++)
+  { debugger;
+    var chainName = listOfChains[i];
 
-      console.log(stdout);
-      //add this stdout to doc.osUser
-      //ThisDoc.osUser += "<div>"+stdout+"</div>";
+    var bsPort          = parseInt(ThisDoc.bootstrapPort);
+    var publicPortCount = parseInt(ThisDoc.publicPortCount);
 
-      for (var i=0, size=listOfDirectories.length; i < size; i++)
-      { var chainName = listOfDirectories[i];
-
-        var bsPort          = parseInt(ThisDoc.bootstrapPort);
-        var publicPortCount = parseInt(ThisDoc.publicPortCount);
-
-        bsPort              = bsPort + (publicPortCount * 2 * i) + i;
-        var publicPortStart = bsPort+1;
-        var publicPortEnd   = publicPortStart + ( publicPortCount * 2 ) -1;
-      
-
-        var commandLineArgs   = [groupName, chainName, bsPort, publicPortStart, publicPortEnd ].join(" ");
-        var execString        = "/home/holochain/Scripts/hc.initialiseChain "+commandLineArgs;
-
-        sysExec
-        ( execString, 
-          { /*"env": newEnv,*/
-          },
-          function(error, stdout, stderr)
-          { debugger;
-
-            console.log(stdout);
-            //add this stdout to doc.osUser
-            //ThisDoc.osUser += "<div>"+stdout+"</div>";
-          }
-        );
-      }
-    }
-  ) 
+    bsPort              = bsPort + (publicPortCount * 2 * i) + i;
+    var publicPortStart = bsPort+1;
+    var publicPortEnd   = publicPortStart + ( publicPortCount * 2 ) -1;
   
-});
+
+    commandLineArgs2   = [groupName, chainName, bsPort, publicPortStart, publicPortEnd ].join(" ");
+    var execString2        = "/home/holochain/Scripts/hc.initialiseChain "+commandLineArgs2;
+    console.log(execString2);
+
+    child_process.execSync
+    ( execString2
+    );
+
+    //fileContentsList.push(execString2);
+
+
+  }
+}
+);
 
 
 /**

@@ -35,14 +35,14 @@ exports = module.exports = function(req, res) {
         var fs        = require('fs');
 
         var groupName         = organisation.key.replace(/-/g, "");
-        var listOfDirectories = organisation.listOfDirectories.split("|");
+        var listOfChains = organisation.listOfChains.split("|");
 
         
-        var i                 = listOfDirectories.indexOf(chainName);
+        var i                 = listOfChains.indexOf(chainName);
 
         if (i != -1)
-        { var bsPort          = parseInt(ThisDoc.bootstrapPort);
-          var publicPortCount = parseInt(ThisDoc.publicPortCount);
+        { var bsPort          = parseInt(organisation.bootstrapPort);
+          var publicPortCount = parseInt(organisation.publicPortCount);
 
           bsPort              = bsPort + (publicPortCount * 2 * i) + i;
           var publicPortStart = bsPort+1;
@@ -62,6 +62,7 @@ exports = module.exports = function(req, res) {
             { debugger;
 
               console.log(stdout);
+              console.log(stderr);
               //add this stdout to doc.osUser
               //ThisDoc.osUser += "<div>"+stdout+"</div>";
             }
@@ -71,12 +72,13 @@ exports = module.exports = function(req, res) {
         { if (fs.existsSync("/home/holochain/"+groupName+"/"+chainName)) 
           { debugger;
 
-            listOfDirectories.push(chainName);
+            listOfChains.push(chainName);
+            organisation.update( { "_id":organisationID }, { $set: { "listOfChains": listOfChains.join("|") }});
 
-            i                 = listOfDirectories.indexOf(chainName);
+            i                 = listOfChains.indexOf(chainName);
 
-            var bsPort          = parseInt(ThisDoc.bootstrapPort);
-            var publicPortCount = parseInt(ThisDoc.publicPortCount);
+            var bsPort          = parseInt(organisation.bootstrapPort);
+            var publicPortCount = parseInt(organisation.publicPortCount);
 
             bsPort              = bsPort + (publicPortCount * 2 * i) + i;
             var publicPortStart = bsPort+1;
@@ -96,6 +98,7 @@ exports = module.exports = function(req, res) {
               { debugger;
 
                 console.log(stdout);
+                console.log(stderr)
                 //add this stdout to doc.osUser
                 //ThisDoc.osUser += "<div>"+stdout+"</div>";
               }
