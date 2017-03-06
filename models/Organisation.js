@@ -45,8 +45,6 @@ Organisation.relationship({ ref: 'User', refPath: 'organisation', path: 'members
 // as the second parameter if you want to use parallel middleware.
 
 
-function spinUpChainsRecursive(listOfChains, currentIndex, )
-
 Organisation.schema.post('save', function(ThisDoc) {
 
   debugger;
@@ -66,7 +64,7 @@ Organisation.schema.post('save', function(ThisDoc) {
 
   console.log(groupName);
 
-  var commandLineArgs   = [githubURL, groupName, "2>&1 | tee -a "+groupLog*"/group.log > /dev/null"].join(" ");
+  var commandLineArgs   = [githubURL, groupName].join(" ");
   var execString        = "/home/holochain/Scripts/hc.initialiseGroup "+commandLineArgs;
   console.log(execString);
 
