@@ -21,90 +21,96 @@
 // 	)
 
 
-
-window.VisualPress = {};
-VisualPress.graphicLoadVersion = "0.0.9.20160726.1639";
-
-$('body').append('<link href="https://fonts.googleapis.com/icon?family=Material+Icons"rel="stylesheet">');
-
-traverse = function(object, address, defaultList=[{}])
-{ defaultCounter        = 0;
-  defaultListTestIndex  = defaultList.length -1;
-
-  var current = object;
-  address = address.split(".");
-
-  for (var wayPoint of address)
-  { if (!current.hasOwnProperty(wayPoint) )
-    { current[wayPoint] =  defaultList[defaultCounter]
-    }
-    current = current[wayPoint];
-
-    if (defaultCounter < defaultListTestIndex)
-    { defaultCounter ++;
-    }
-  }
-
-  return current;
-}
-prettyPrint = function(field, value)
-{ var currentValue;
-  if (field.data.hasOwnProperty("fieldPrecisionFunction") )
-  { currentValue = value;
-    eval(field.data.fieldPrecisionFunction);
-  }
-  else
-  { toReturn = standardPrecision(value);
-  }
-
-  return unitsAroundOutput(field, toReturn);
-}
-unitsAroundOutput = function(field, output)
-{ return field.data.unitPrefix+" "+output+" "+field.data.unitSuffix;
-}
-
-standardPrecision = function(number)
-{ return Number(number).toPrecision(5);
-}
-
-VisualPress.oop = function()
-{ this.init = function(rootElement)
-  { visualPress.display                = $(rootElement);
-    visualPress.welcome();
-
-  //   var ajaxOptions =
-  //   { "url":       "/organisation_data",
-  //     "method":    "GET",
-  //     "dataType":  "json",
-  //     "data":
-  //     { "orgID": visualPress.,
-  //     },
-  //     "success":
-  //     { function(data, status, request)
-  //       { visualPress.organisation = new VisualPress.Organisation(data.organisation);
-  //       }
-  //     }
-  //   };
-  //   $.ajax(ajaxOptions);
-  };
-
-  this.welcome = function()
-  { O.create( [ "#welcomeOver.wrapper.fullScreenOverlay.smoothMove",
-                [ [ ".centerBackgroundImage.visualToolsLogo" ],
-                ],
-              ],
-              visualPress.display,
-              visualPress.display
-            );
-  };
-
-};
-
 $().ready(
   function()
-  { window.visualPress = new VisualPress.oop();
+  { $('body').append('<link href="https://fonts.googleapis.com/icon?family=Material+Icons"rel="stylesheet">');
 
-    visualPress.init();
+    traverse = function(object, address, defaultList=[{}])
+    { defaultCounter        = 0;
+      defaultListTestIndex  = defaultList.length -1;
+
+      var current = object;
+      address = address.split(".");
+
+      for (var wayPoint of address)
+      { if (!current.hasOwnProperty(wayPoint) )
+        { current[wayPoint] =  defaultList[defaultCounter]
+        }
+        current = current[wayPoint];
+
+        if (defaultCounter < defaultListTestIndex)
+        { defaultCounter ++;
+        }
+      }
+
+      return current;
+    }
+    prettyPrint = function(field, value)
+    { var currentValue;
+      if (field.data.hasOwnProperty("fieldPrecisionFunction") )
+      { currentValue = value;
+        eval(field.data.fieldPrecisionFunction);
+      }
+      else
+      { toReturn = standardPrecision(value);
+      }
+
+      return unitsAroundOutput(field, toReturn);
+    }
+    unitsAroundOutput = function(field, output)
+    { return field.data.unitPrefix+" "+output+" "+field.data.unitSuffix;
+    }
+
+    standardPrecision = function(number)
+    { return Number(number).toPrecision(5);
+    }
+
+    VîsualPress = function()
+    { this.init = function(rootElement)
+      { visualPress.display                = $(rootElement);
+        visualPress.welcome();
+
+        visualPress.orgID = IMPORTDATA();
+
+        var ajaxOptions =
+        { "url":       "/organisation_data",
+          "method":    "GET",
+          "dataType":  "json",
+          "data":
+          { "orgID": visualPress.orgID,
+          },
+          "success":
+            function(data, status, request)
+            { debugger;
+              visualPress.organisation = new visualPress.Organisation(data.organisation);
+            }
+          
+        };
+        $.ajax(ajaxOptions);
+      };
+
+      this.welcome = function()
+      { O.create( [ "#welcomeOver.wrapper.fullScreenOverlay.smoothMove",
+                    [ [ ".centerBackgroundImage.visualToolsLogo" ],
+                    ],
+                  ],
+                  visualPress.display,
+                  visualPress.display
+                );
+      };
+
+      this.Organisation = function(data)
+      { this.data = data;
+      }
+
+
+
+    };
+
+    visualPress = new VîsualPress();
+
+    visualPress.init($("body"));
+    visualPress.graphicLoadVersion = "0.0.9.20160726.1639";
   }
 );
 

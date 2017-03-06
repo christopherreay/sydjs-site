@@ -8,13 +8,13 @@ exports = module.exports = function(req, res) {
     locals = res.locals;
 
   console.log(req.query.id);
-  locals.orgID = req.query.orgID
+  var orgID = req.query.orgID
   
   // locals.section = 'members';
   
   //view.query('organisations', Organisation.model.find({"_id": req.query.orgID}).sort('name'), 'members');
 
-  Organisation.model.findOne({"_id": organisationID})
+  Organisation.model.findOne({"_id": orgID})
     .exec
     ( function(err, organisation)
       { res.json({"organisation": organisation});

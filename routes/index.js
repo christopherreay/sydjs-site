@@ -88,6 +88,7 @@ exports = module.exports = function (app) {
 	app.get('/organisations', routes.views.organisations);
 	app.get('/organisation', routes.views.organisation);
 	app.get('/updateFromGit', routes.views.updateFromGit);
+	app.get('/organisation_data', routes.views.organisation_data);
 
 	app.get('/links', routes.views.links);
 	app.get('/links/:tag?', routes.views.links);

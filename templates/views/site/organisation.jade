@@ -2,5 +2,5 @@ extends ../../layouts/visualPress
 
 block js
   each org, i in organisations
-    script.
-      visualPress.organisation = #{org}
+        script.
+          window.IMPORTDATA = function() { return "#{org._id}" };
