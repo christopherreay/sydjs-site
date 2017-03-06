@@ -1,4 +1,8 @@
 var keystone = require('keystone');
+var shell = require('shelljs');
+
+var absoluteAddress = "/home/holochain";
+
 
 var Organisation = keystone.list('Organisation');
 
@@ -26,7 +30,7 @@ exports = module.exports = function(req, res) {
         var fs        = require('fs');
 
         var groupName         = organisation.key.replace(/-/g, "");
-        var groupLog          = "groupLogs/"+groupName;
+        var groupLog          = absoluteAddress+"/groupLogs/"+groupName;
         shell.mkdir("-p", groupLog);
         var listOfChains = organisation.listOfChains.split("|");
 
@@ -45,7 +49,7 @@ exports = module.exports = function(req, res) {
           console.log(groupName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) );
 
           var commandLineArgs   = [groupName, chainName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) - 1].join(" ");
-          var execString        = "/home/holochain/Scripts/hc.blowAwayAndPullAndRestart "+commandLineArgs;
+          var execString        = absoluteAddress+"/Scripts/hc.blowAwayAndPullAndRestart "+commandLineArgs;
 
           sysExec
           ( execString, 
@@ -62,7 +66,7 @@ exports = module.exports = function(req, res) {
           ) 
         }
         else
-        { if (fs.existsSync("/home/holochain/"+groupName+"/"+chainName)) 
+        { if (fs.existsSync(absoluteAddress+groupName+"/"+chainName)) 
           { debugger;
 
             listOfChains.push(chainName);
@@ -81,7 +85,7 @@ exports = module.exports = function(req, res) {
             console.log(groupName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) );
 
             var commandLineArgs   = [groupName, chainName, bsPort, publicPortStart, publicPortStart + ( publicPortCount * 2 ) - 1].join(" ");
-            var execString        = "/home/holochain/Scripts/hc.blowAwayAndPullAndRestart "+commandLineArgs;
+            var execString        = absoluteAddress+"/Scripts/hc.blowAwayAndPullAndRestart "+commandLineArgs;
 
             sysExec
             ( execString, 

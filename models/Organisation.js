@@ -2,6 +2,8 @@ var keystone = require('keystone');
 var Types = keystone.Field.Types;
 var shell = require('shelljs');
 
+var absoluteAddress = "/home/holochain";
+
 /**
  * Organisations Model
  * ===================
@@ -59,13 +61,12 @@ Organisation.schema.post('save', function(ThisDoc) {
 
   var githubURL       = ThisDoc.githubURL;
   var groupName       = ThisDoc.key.replace(/-/g, "");
-  var groupLog        = "groupLogs/"+groupName;
-  shell.mkdir("-p", groupLog);
-
+  var groupLog        = absoluteAddress+"/groupLogs/"+groupName;
+  
   console.log(groupName);
 
   var commandLineArgs   = [githubURL, groupName].join(" ");
-  var execString        = "/home/holochain/Scripts/hc.initialiseGroup "+commandLineArgs;
+  var execString        = absoluteAddress+"/Scripts/hc.initialiseGroup "+commandLineArgs;
   console.log(execString);
 
   var fileContentsList = [execString];
@@ -91,7 +92,7 @@ Organisation.schema.post('save', function(ThisDoc) {
   
 
     commandLineArgs2   = [groupName, chainName, bsPort, publicPortStart, publicPortEnd ].join(" ");
-    var execString2        = "/home/holochain/Scripts/hc.initialiseChain "+commandLineArgs2;
+    var execString2        = absoluteAddress+"/Scripts/hc.initialiseChain "+commandLineArgs2;
     console.log(execString2);
 
     child_process.exec
