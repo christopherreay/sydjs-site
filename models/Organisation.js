@@ -25,7 +25,7 @@ Organisation.add
   	//publicPortStart: 	 { type: String, initial: true   },
     publicPortCount:   { type: String, initial: true,  default: "5" },
     listOfChains: 
-         { type: String, default: "simpleExample|slackChat" },
+         { type: String, default: "simple|chat|clutter", initial:true },
     
 	},
 	"Description",

@@ -1,6 +1,7 @@
 extends ../../layouts/visualPress
 
-block js
+block extends js
   each org, i in organisations
         script.
           window.IMPORTDATA = function() { return "#{org._id}" };
+  script(src="/js/metaHolo.js", type="text/javascript")

@@ -111,7 +111,7 @@ $().ready(
             ],
           ],
           visualPress.display,
-          visualPress.display,
+          visualPress.display
         );
 
         visualPress.display.organisation.on
@@ -138,7 +138,7 @@ $().ready(
                               ],
                             ],
                             visualPress.display.chains,
-                            visualPress.display,
+                            visualPress.display
                           );
                         }
                       );
