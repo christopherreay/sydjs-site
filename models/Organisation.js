@@ -15,20 +15,20 @@ var Organisation = new keystone.List('Organisation', {
 });
 
 Organisation.add
-(	{ name: { type: String, index: true, initial: true },
+(	{ name: { type: String, index: true, initial: true, default: "testrun" },
   	logo: { type: Types.CloudinaryImage },
 	},
 	"Project Repo",
 	{
-  githubURL:          { type: Types.Url,    initial: true   },
+  githubURL:          { type: Types.Url,    initial: true  , default: "https://github.com/jayDayZee/holochainSkeleton.git" },
 	},
   "Server Stuff",
   { 
-    bootstrapPort: 	   { type: String, initial: true   },
+    bootstrapPort: 	   { type: String, initial: true, default: 10000   },
   	//publicPortStart: 	 { type: String, initial: true   },
     publicPortCount:   { type: String, initial: true,  default: "5" },
     listOfChains: 
-         { type: String, default: "simpleExample|slackChat" },
+         { type: String, initial: true, default: "simple|chat|clutter" },
 	},
 	"Description",
 	{ description: { type: Types.Markdown },
